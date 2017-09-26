@@ -1,0 +1,17 @@
+
+*.class
+
+# Package Files #
+*.war
+*.ear
+
+# IDEA config files
+.idea/
+*.iml
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
+log/
+out/
