@@ -1,0 +1,73 @@
+group 'io.gh'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext {
+        springBootVersion = '1.5.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        //classpath 'org.springframework:springloaded:${springBootVersion}'
+        classpath 'com.android.tools.build:gradle:2.3.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+//apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'gh-vue'
+    version = '0.0.1'
+}
+task withDependencies(type: Jar){
+    manifest{
+        attributes 'Implementation-Title': 'Gradle Jar',
+                'Implementation-Version': version,
+                'Main-Class':'io.gh.VueApp'
+    }
+    baseName = 'gh-vue-dependencies'
+    from{configurations.compile.collect{it.isDirectory() ? it : zipTree(it)}}
+    with jar
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+//plugins {
+//    compile : 'modules-manager:0.2.1'
+//}
+dependencies {
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    //compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.2.15'
+    compile 'com.github.jknack:handlebars-helpers:4.0.6',
+            'com.github.jknack:handlebars-jackson2:4.0.6',
+            'com.github.jknack:handlebars-humanize:4.0.6',
+            'com.github.jknack:handlebars-markdown:4.0.6'
+    // https://mvnrepository.com/artifact/org.webjars/bootstrap
+    compile group: 'org.webjars', name: 'bootstrap', version: '3.3.7-1'
+    // https://mvnrepository.com/artifact/org.webjars/jquery
+    compile group: 'org.webjars', name: 'jquery', version: '3.2.1'
+    // https://mvnrepository.com/artifact/org.webjars/vue
+    compile group: 'org.webjars', name: 'vue', version: '2.4.2'
+    // end::jetty[]
+    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    // end::actuator[]
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+    testCompile("junit:junit")
+    compile("org.springframework.boot:spring-boot-devtools")
+}
+
